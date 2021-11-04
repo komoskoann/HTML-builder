@@ -19,7 +19,7 @@ async function writeToFile(path, answer) {
   if(answer !== 'exit') {
     fs.appendFile(
       path,
-      `${answer}`,
+      `${answer}\n`,
       (err) => {
         if (err) throw err;
       }
