@@ -18,33 +18,9 @@ async function main() {
   await createFile(stylePath, '');
   await createNewDir(destAssetsPath);
 
-  //copying assets directory
-  const files = await readDir(srcAssetsPath);
-  files.forEach(file => processFile(file, srcAssetsPath, destAssetsPath));
-
-  //filling style.css file
-  let data = [];
-  const styles = await readDir(dirStylesPath);
-  for (let style of styles) {
-    let stylePath = path.join(dirStylesPath, style.name);
-    let styleExt = path.extname(stylePath);
-    if(style.isFile() && styleExt === '.css') {
-      data.push(await readFile(stylePath));
-    }
-  }
-  await writeToFile(stylePath, data.join('\n'))
-
-  //filling index.html file
-  let templateText = await readFile(templatePath);
-  let components = await readDir(dirComponentsPath);
-  for(let component of components) {
-    let filePath = path.join(dirComponentsPath, component.name);
-    let fileExt = path.extname(filePath);
-    let fileName = path.basename(filePath, fileExt);
-    let componentText = await readFile(filePath);
-    templateText = templateText.replace(new RegExp(`{{${fileName}}}`,'g'), componentText);
-  }
-  await writeToFile(indexPath, templateText);
+  await copyAssets();
+  await fillStyleFile();
+  await fillIndexFile();
 }
 
 async function deleteNewDir(path) {
@@ -85,6 +61,37 @@ async function processFile(file, srcAssetsPath, destAssetsPath) {
     const files = await readDir(srcFilePath);
     files.forEach(file => processFile(file, srcFilePath, destFilePath));
   }
+}
+
+async function copyAssets() {
+  const files = await readDir(srcAssetsPath);
+  files.forEach(file => processFile(file, srcAssetsPath, destAssetsPath));
+}
+
+async function fillStyleFile() {
+  let data = [];
+  const styles = await readDir(dirStylesPath);
+  for (let style of styles) {
+    let stylePath = path.join(dirStylesPath, style.name);
+    let styleExt = path.extname(stylePath);
+    if(style.isFile() && styleExt === '.css') {
+      data.push(await readFile(stylePath));
+    }
+  }
+  await writeToFile(stylePath, data.join('\n'));
+}
+
+async function fillIndexFile() {
+  let templateText = await readFile(templatePath);
+  let components = await readDir(dirComponentsPath);
+  for(let component of components) {
+    let filePath = path.join(dirComponentsPath, component.name);
+    let fileExt = path.extname(filePath);
+    let fileName = path.basename(filePath, fileExt);
+    let componentText = await readFile(filePath);
+    templateText = templateText.replace(new RegExp(`{{${fileName}}}`,'g'), componentText);
+  }
+  await writeToFile(indexPath, templateText);
 }
 
 main();
