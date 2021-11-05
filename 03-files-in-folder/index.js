@@ -21,8 +21,8 @@ async function processFile(file) {
     let fileExt = path.extname(filePath);
     let fileName = path.basename(filePath, fileExt);  
     let stat = await getStat(filePath);
-    let fileSize = stat.size / 1000;
-    console.log(`${fileName} - ${fileExt.slice(1)} - ${fileSize}kb`);
+    let fileSize = stat.size;
+    console.log(`${fileName} - ${fileExt.slice(1)} - ${fileSize}b`);
   }
 }
 
