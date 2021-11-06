@@ -38,7 +38,7 @@ rl.on('line', (answer) => {
 })
 
 async function sayGoodBuy() {
-  stdout.write('Good bye');
+  stdout.write('Good bye!\n');
   rl.close();
 }
 
