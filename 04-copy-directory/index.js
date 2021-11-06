@@ -4,14 +4,17 @@ const srcDirPath = path.join(__dirname, 'files');
 const destDirPath = path.join(__dirname, 'files-copy');
 
 async function main() {
-  const delDir = await deleteNewDir(destDirPath);
-  const newDir = await createNewDir(destDirPath);
+  try {
+    await deleteNewDir(destDirPath);
+  } catch {
+  }
+  await createNewDir(destDirPath);
   const files = await readDir(srcDirPath);
   files.forEach(processFile);
 }
 
 async function deleteNewDir(path) {
-  return fs.rmdir(path, {recursive: true});
+  return fs.rm(path, {recursive: true});
 }
 
 async function createNewDir(path) {
