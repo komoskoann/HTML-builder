@@ -11,8 +11,10 @@ const dirStylesPath = path.join(__dirname, 'styles');
 const dirComponentsPath = path.join(__dirname, 'components');
 
 async function main() {
-  
-  await deleteNewDir(projectDistPath);
+  try {
+    await deleteNewDir(projectDistPath);
+  } catch {
+  }
   await createNewDir(projectDistPath);
   await createFile(indexPath, '');
   await createFile(stylePath, '');
@@ -24,7 +26,7 @@ async function main() {
 }
 
 async function deleteNewDir(path) {
-  return fs.rmdir(path, {recursive: true});
+  return fs.rm(path, {recursive: true});
 }
 
 async function createNewDir(path) {
